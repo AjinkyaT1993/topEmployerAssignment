@@ -13,13 +13,13 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>c:availableProducts</componentName>
+                <componentName>availableProducts</componentName>
                 <identifier>c_availableProducts</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
-                <componentName>c:orderItems</componentName>
+                <componentName>orderItems</componentName>
                 <identifier>c_orderItems</identifier>
             </componentInstance>
         </itemInstances>
@@ -29,8 +29,8 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-            <identifier>force_detailPanel</identifier>
                 <componentName>force:detailPanel</componentName>
+                <identifier>force_detailPanel</identifier>
             </componentInstance>
         </itemInstances>
         <name>sidebar</name>
