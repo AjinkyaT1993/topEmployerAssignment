@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Lets the Available Products component ask the Order Items component to add a product.</description>
+    <isExposed>false</isExposed>
+    <lightningMessageFields>
+        <description>Id of the standard PricebookEntry to add to the order</description>
+        <fieldName>pricebookEntryId</fieldName>
+    </lightningMessageFields>
+    <masterLabel>OrderBuilder</masterLabel>
+</LightningMessageChannel>

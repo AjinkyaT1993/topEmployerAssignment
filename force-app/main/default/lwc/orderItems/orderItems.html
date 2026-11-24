@@ -1,0 +1,57 @@
+<template>
+    <lightning-card title="Order Items" icon-name="standard:orders">
+        <lightning-button
+            slot="actions"
+            label="Send Order"
+            variant="brand"
+            disabled={cannotSend}
+            onclick={handleSend}
+        ></lightning-button>
+
+        <div class="slds-is-relative slds-var-p-horizontal_small">
+            <lightning-spinner lwc:if={isBusy} alternative-text="Updating order" size="small"></lightning-spinner>
+
+            <template lwc:if={isLocked}>
+                <p class="slds-text-color_weak slds-var-m-bottom_small">
+                    This order is no longer a draft and cannot be changed.
+                </p>
+            </template>
+
+            <template lwc:if={hasItems}>
+                <lightning-datatable
+                    key-field="id"
+                    data={rows}
+                    columns={columns}
+                    hide-checkbox-column
+                    onrowaction={handleRowAction}
+                ></lightning-datatable>
+
+                <div class="slds-var-m-top_medium slds-var-p-top_small slds-border_top">
+                    <template for:each={familyTotals} for:item="f">
+                        <div key={f.family} class="slds-grid slds-grid_align-spread slds-var-m-bottom_xx-small">
+                            <span>{f.family} subtotal</span>
+                            <lightning-formatted-number
+                                value={f.total}
+                                format-style="currency"
+                                currency-code={currencyCode}
+                            ></lightning-formatted-number>
+                        </div>
+                    </template>
+                    <div class="slds-grid slds-grid_align-spread slds-text-heading_small slds-var-m-top_x-small">
+                        <strong>Order total</strong>
+                        <strong>
+                            <lightning-formatted-number
+                                value={orderTotal}
+                                format-style="currency"
+                                currency-code={currencyCode}
+                            ></lightning-formatted-number>
+                        </strong>
+                    </div>
+                </div>
+            </template>
+            <template lwc:else>
+                <p class="slds-text-color_weak slds-var-p-vertical_small">No products added yet.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,23 @@
+<template>
+    <lightning-card title="Available Products" icon-name="standard:product">
+        <div class="slds-var-p-horizontal_small">
+            <template lwc:if={isLocked}>
+                <p class="slds-text-color_weak slds-var-m-bottom_small">
+                    This order is locked. Products can no longer be added.
+                </p>
+            </template>
+            <div style="height: 320px">
+                <lightning-datatable
+                    key-field="id"
+                    data={rows}
+                    columns={columns}
+                    hide-checkbox-column
+                    enable-infinite-loading={hasMore}
+                    is-loading={isLoading}
+                    onloadmore={loadMore}
+                    onrowaction={handleRowAction}
+                ></lightning-datatable>
+            </div>
+        </div>
+    </lightning-card>
+</template>
