@@ -16,7 +16,7 @@ for (Integer i = 1; i <= 120; i++) {
         IsActive = true
     ));
 }
-insert products;
+insert products; 
 
 List<PricebookEntry> entries = new List<PricebookEntry>();
 for (Integer i = 0; i < products.size(); i++) {
