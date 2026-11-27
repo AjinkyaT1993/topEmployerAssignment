@@ -72,7 +72,7 @@ export default class AvailableProducts extends LightningElement {
         {
             label: '',
             type: 'button-icon',
-            fixedWidth: 50,
+            fixedWidth: 80,
             typeAttributes: {
                 // Identifies the action when the button is clicked.
                 name: 'add',

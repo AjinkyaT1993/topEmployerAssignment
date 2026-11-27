@@ -116,7 +116,11 @@ public with sharing class OrderBuilderController {
         // Assign the product's Price Book if the order does not have one.
         if (ord.Pricebook2Id == null) {
             ord.Pricebook2Id = pbe.Pricebook2Id;
-            update ord;
+            try {
+                update ord;
+            } catch (DmlException e) {
+                throw dmlError('assign pricebook to order', e);
+            }
 
         // Prevent adding products from a different Price Book.
         } else if (ord.Pricebook2Id != pbe.Pricebook2Id) {
@@ -133,17 +137,25 @@ public with sharing class OrderBuilderController {
 
         // Create a new order line item if the product does not exist.
         if (existing.isEmpty()) {
-            insert new OrderItem(
-                OrderId = orderId,
-                PricebookEntryId = pbe.Id,
-                Quantity = 1,
-                UnitPrice = pbe.UnitPrice
-            );
+            try {
+                insert new OrderItem(
+                    OrderId = orderId,
+                    PricebookEntryId = pbe.Id,
+                    Quantity = 1,
+                    UnitPrice = pbe.UnitPrice
+                );
+            } catch (DmlException e) {
+                throw dmlError('add product to order', e);
+            }
 
         // Otherwise, increment the existing product's quantity.
         } else {
             existing[0].Quantity += 1;
-            update existing[0];
+            try {
+                update existing[0];
+            } catch (DmlException e) {
+                throw dmlError('update product quantity', e);
+            }
         }
     }
 
@@ -170,7 +182,11 @@ public with sharing class OrderBuilderController {
         getDraftOrder(item.OrderId);
 
         // Delete the selected order line item.
-        delete item;
+         try {
+            delete item;
+        } catch (DmlException e) {
+            throw dmlError('remove product from order', e);
+        }
     }
 
     /**
@@ -244,7 +260,11 @@ public with sharing class OrderBuilderController {
 
         // Activate the order only after the external API request succeeds.
         ord.Status = 'Activated';
-        update ord;
+        try {
+            update ord;
+        } catch (DmlException e) {
+            throw dmlError('activate order', e);
+        }
     }
 
     // ---- Helper Methods ----
@@ -297,6 +317,27 @@ public with sharing class OrderBuilderController {
         AuraHandledException e = new AuraHandledException(message);
         e.setMessage(message);
         return e;
+    }
+
+    /**
+     * Handles DML exceptions and returns a user-friendly AuraHandledException.
+     *
+     * @param operation Description of the operation that failed.
+     * @param e         Original DmlException.
+     * @return AuraHandledException with the DML error message.
+     */
+    private static AuraHandledException dmlError(
+        String operation,
+        DmlException e
+    ) {
+        String message = 'Unable to ' + operation + ': ' + e.getDmlMessage(0);
+
+        AuraHandledException auraException =
+            new AuraHandledException(message);
+
+        auraException.setMessage(message);
+
+        return auraException;
     }
 
     // ---- External API Payload Classes ----
